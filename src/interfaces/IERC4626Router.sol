@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: GPL-2.0-or-later
 pragma solidity 0.8.18;
 
-import "@openzeppelin/contracts/interfaces/IERC4626.sol";
+import "openzeppelin-contracts/contracts/interfaces/IERC4626.sol";
 
 /// @title ERC4626Router Interface
 /// @notice Extends the ERC4626RouterBase with specific flows to save gas
