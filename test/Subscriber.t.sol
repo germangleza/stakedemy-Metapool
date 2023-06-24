@@ -3,7 +3,7 @@ pragma solidity ^0.8.13;
 
 import "forge-std/Test.sol";
 
-// import "../src/Subscriber.sol";
+import "../src/Subscriber.sol";
 import "../src/IStakedVault.sol";
 import "openzeppelin-contracts/contracts/token/ERC20/IERC20.sol";
 import "./utils/Utilities.sol";
@@ -22,7 +22,7 @@ Addresses of the deployed contracts:
 
 contract SubscriberTest is Test {
     uint internal auroraFork;
-    // Subscriber internal subscriber;
+    Subscriber internal subscriber;
     IStakedVault internal vault;
     IERC20 internal aur;
     Utilities internal utils;
@@ -35,21 +35,24 @@ contract SubscriberTest is Test {
 
     function setUp() public {
         auroraFork = vm.createFork("https://mainnet.aurora.dev");
-        vault = IStakedVault(address(0xb01d35D469703c6dc5B369A1fDfD7D6009cA397F));
+        vault = IStakedVault(
+            address(0xb01d35D469703c6dc5B369A1fDfD7D6009cA397F)
+        );
         aur = IERC20(address(0x8BEc47865aDe3B172A928df8f990Bc7f2A3b9f79));
 
-        // subscriber = new Subscriber();
+        subscriber = new Subscriber(address(vault), address(aur));
         utils = new Utilities();
         users = utils.createUsers(5);
 
         bob = users[0];
         david = users[1];
 
-        vm.startPrank(address(0x23085597C58A6dcAcF94161Cbf43F5f684BCb0a9)); //address with a lot of aurora 
+        vm.startPrank(address(0x23085597C58A6dcAcF94161Cbf43F5f684BCb0a9)); //address with a lot of aurora
         aur.transfer(address(bob), 500 * DECIMALS);
         vm.stopPrank();
 
         vm.startPrank(address(0xd6E4be59FF015aFeFce9b9a78b1cF61be1027cF1));
+        vault.whitelistAccount(address(subscriber));
         vault.whitelistAccount(bob);
         vault.whitelistAccount(david);
         vm.stopPrank();
@@ -60,16 +63,35 @@ contract SubscriberTest is Test {
         uint bal = aur.balanceOf(bob);
         assertEq(bal, 500 * DECIMALS);
         aur.approve(address(vault), bal);
-        uint shares = vault.deposit(bal, bob);
-        uint aurPrice = vault.getStAurPrice();
-        uint initValue = (shares * aurPrice) / DECIMALS;
-        assertEq(initValue, 1);
-        vm.stopPrank();
-        vm.warp(365 days);
-        uint secondPrice = vault.getStAurPrice();
-        uint secondValue = (shares * secondPrice) /DECIMALS;
-        assertEq(secondValue, 1);
-        vm.stopPrank();
-       
+        vault.deposit(bal, bob);
     }
+
+    function testSubscribe() public {
+        vm.startPrank((bob));
+        uint bal = aur.balanceOf(bob);
+        assertEq(bal, 500 * DECIMALS);
+        aur.approve(address(subscriber), bal);
+        uint shares = subscriber.subscribe(bal);
+        bool isSubscriber = subscriber.isMember(bob);
+        assertEq(isSubscriber, true);
+        uint bobBalInSubscriber = subscriber.balance(address(bob));
+        assertEq(bobBalInSubscriber, shares);
+        vm.stopPrank();
+    }
+
+    function testSubscribeWithNoAssets() public {
+        vm.startPrank((david));
+        uint bal = aur.balanceOf(david);
+        assertEq(bal, 500 * DECIMALS);
+        aur.approve(address(subscriber), bal);
+        vm.expectRevert("Not enought funds");
+        uint shares = subscriber.subscribe(bal);
+        bool isSubscriber = subscriber.isMember(david);
+        assertEq(isSubscriber, false);
+        vm.stopPrank();
+    }
+
+    // function testRedeem() public {}
+
+    function testWithdraw() public {}
 }
