@@ -1,4 +1,5 @@
 # STAKEDEMY
+![Logotipo](https://github.com/germangleza/stakedemy-Metapool/assets/91810556/2da861d9-e4a9-4cc0-873e-04eab1ccf764)
 Stake to learn & earn academy 
 
 ### Team 
