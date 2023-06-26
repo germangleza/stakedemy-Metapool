@@ -33,7 +33,7 @@ Here's how it works:
 
 At the end of the 12 months, users retrieve the tokens they had locked in our vault. With this model, you can continue to learn without spending capital, but by locking your tokens, you increase your commitment level to learning and could earn money based on your efforts.
 
-
+![stakedemy map](https://github.com/germangleza/stakedemy-Metapool/assets/91810556/dc2f7753-1cd2-4130-875c-24d5e9dae3e1)
 
 We also developed a decentralized frontend component using BOS. The implementation allows the user to select which token to lock, either Near or Aurora, connect their wallet, and lock the tokens to gain access to the academy.
 
