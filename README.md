@@ -22,6 +22,8 @@ We are aware that education is key and necessary to build a better decentralized
 
 That's why we developed Stakedemy: Stake to Learn and Earn academy, a gamified educational platform powered by liquid staking protocol tokens. Users must lock Near or Aurora tokens for a duration of 12 months to gain access. Our contract goes and stakes the tokens in MetaPool, taking the stNear or stAurora tokens and locking them for 12 months to grant access to the academy to the user. The rewards generated are used to gamify the educational platform and as a source of income for Stakedemy. 
 
+![image](https://github.com/germangleza/stakedemy-Metapool/assets/91810556/cfe8488e-562f-4254-aa46-82cf5955b805)
+
 Here's how it works:
 1.	Access to the academy is set in either $Near or $Aurora.
 2.	Users need to lock the required amount of tokens for 12 months on our platform.
